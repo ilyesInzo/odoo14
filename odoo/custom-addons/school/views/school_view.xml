@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- id must be unique -->
+    <record id="school_list_view" model="ir.ui.view">
+        <field name="name">school.list.view</field>        <!-- the view name -->
+        <field name="model">school.profile</field>        <!-- the module name that we already created in model file _name=xxx -->
+        <field name="arch" type="xml">            <!-- the view type list, kanbane, gant... -->
+            <tree>                <!-- we use tree ti create a list-->
+                <field name="name"/>
+                <!-- our columns name -->
+                <field name="email"/>
+                <field name="phone"/>
+                <!-- FINALY we update the manifest to make this view visible, but nor realy visible as we have to add it in the menu -->
+            </tree>
+        </field>
+    </record>
+
+    <record id="school_form_view" model="ir.ui.view">
+        <field name="name">school.form.view</field>
+        <field name="model">school.profile</field>
+        <field name="arch" type="xml">
+            <form>                <!-- form to create a formular -->
+                <group>
+                    <group>
+                        <field name="name" string="From XML"/>
+                        <!--for boolean field we use 1,0 not True,False like for readonly-->
+                        <field name="email" placeholder="abc@yz.com"/>
+                        <field name="phone" invisible="0"/>
+                        <!-- by default it is False, i added it just to remember it exist-->
+                        <field name="is_virtual_school"/>
+                        <field name="result"/>
+                        <field name="school_rank"/>
+                        <!-- we can add widget="html" to transform the simple area text to like description text-->
+                        <field name="address" />
+                    </group>
+                    <group>
+                        <field name="open_date"/>
+                        <field name="establish_date" required="1"/>
+                        <field name="school_type"/>
+                        <field name="auto_rank"/>
+
+                    </group>
+                </group>
+                <group>
+                    <field name="documents" filename="doc_name"/>
+                    <!-- bind the given name to the doc-->
+                    <field name="doc_name" invisible="1"/>
+                    <!-- the name will be added near the document-->
+                    <field name="school_image" widget="image"/>
+                    <!-- widget image will allow to display the image-->
+                    <field name="school_description"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <!-- we need a window action to be able to display the list/kanban/...-->
+    <record id="action_school_profile" model="ir.actions.act_window">
+        <field name="name">School Profile</field>
+        <field name="res_model">school.profile</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- the action that we already created -->
+    <menuitem id="school_root_menu" name="School"/>
+    <!--this will be displayed above link in the small list where we find sales, products...-->
+    <menuitem id="school_sub_menu" parent="school_root_menu" name="School Profile"/>
+    <menuitem id="school_profile_menu" action="action_school_profile" parent="school_sub_menu"/>
+
+    <!-- we have also to give the access rights-->
+    <!-- in access right we will add the access to defeult group, the model field should start with model_...-->
+
+</odoo>

@@ -1,0 +1,17 @@
+<odoo>
+    <data>
+
+        <record id="student_extend_form_view" model="ir.ui.view">
+            <field name ="name">student_extend form_view</field>
+            <field name ="model">school.student</field>
+            <field name ="inherit_id" ref="school_student.student_form_view"/>
+            <!-- ref = the id of the related view here formView-->
+            <field name ="arch" type="xml">
+                <field name ="name" position="after">
+                    <field name ="student_full_name" />
+                </field>
+            </field>
+        </record>
+    </data>
+
+</odoo>

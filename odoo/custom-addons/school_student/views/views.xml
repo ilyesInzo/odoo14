@@ -1,0 +1,192 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+
+    <record model="ir.ui.view" id="school_student.list">
+      <field name="name">school_student list</field>
+      <field name="model">school.student</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="school_id"/>
+          <field name="is_virtual"/>
+          <field name="roll_number"/> <!-- a function called when installing/upgrading a module-->
+          <!-- related field-->
+        </tree>
+      </field>
+    </record>
+
+    <!-- explicit form view definition -->
+
+    <record id="student_form_view" model="ir.ui.view">
+      <field name="name">student.form.view</field>
+      <field name="model">school.student</field>
+      <field name="arch" type="xml">
+        <form>
+          <button name="my_custom_button" string="Say Hello" type="object"/>
+          <button name="open_fees_wiz" string="Open wizard from custom method" type="object"/>
+          <!--object = custom method-->
+          <button name="school_student.student_fees_update_action" string="Open wizard using action" type="action"/>
+          <!-- action = wizard method-->
+
+          <group>
+            <group>
+              <field name="name"/>
+              <field name="roll_number"/>
+              <field name="currency_id"/>
+              <!-- added after extend-->
+              <field name="parent_name"/>
+              <!-- we will filter the value appearing : [(model_field_n)ame,operator,value(parentModelID,staticValue))...]-->
+              <!-- To enable/disable the possibility to create/edit a school from the choice list/link we use options-->
+              <!--no_create to not create a field when typing, no_open to not go to school when clicking its name and no link-->
+              <!-- no_quick_create=True to just avoid creating the field when typing a no available one-->
+              <!-- we can use widget="selection" to prevent all sort of creation and render the firld as a simple selection-->
+              <!--field name="school_id" domain="[('is_virtual_school','=',True)]" options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/-->
+              <!-- this will tronsform the many to one to a simple selection, no need to use options to prevent create/edit-->
+              <field name="school_id"/>
+              <field name="school_adress" nolabel="1"/>
+              <!-- related field-->
+              <field name="hobby_list" widget="many2many_tags"/>
+              <!--many2many_checkboxes-->
+              <field name="student_fees"/>
+              <!-- we use it to change behaviour based on conditions, invisible/required/readonly-->
+              <field name="bDate" attrs="{'invisible':[('student_fees','=',0)],'required':[('student_fees','=',1)],'readonly':[('student_fees','=',3)]}"/>
+              <field name="student_age" />
+              <!-- we can also create a float field and add widget="monetry" to have same result-->
+              <field name="ref_if"/>
+              <field name="active"/>
+              <field name="street"/>
+              <field name="country"/>
+
+            </group>
+          </group>
+        </form>
+      </field>
+    </record>
+
+    <!-- hobby list view definition -->
+
+    <record id="hobby_list_view" model="ir.ui.view">
+      <field name="name">hobby.list.view</field>
+      <field name="model">hobby</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- we extend the school form by adding elements -->
+
+    <record id="school_extend_form_view" model="ir.ui.view">
+      <field name="name">student.extend.form.view</field>
+      <field name="model">school.profile</field>      <!-- we give the related model view-->
+      <field name="inherit_id" ref="school.school_form_view"/>
+      <!--ATTENTION school.viewid because the folder/manifestNameAttribute is School (lowercase please)-->
+      <!-- we have to refer to the form view id-->
+      <field name="arch" type="xml">
+        <field name="school_description" position="after">          <!-- to be able to place the new fileds we select olds one-->
+          <field name="student_list" nolabel="0">            <!-- we add our students list, by default we have the list/form of the student-->
+            <tree editable="top">              <!-- when we add a student it is added at first place in the list-->
+              <field name="name"/>
+              <!-- we want to display the name only not the school as we are already in school-->
+            </tree>
+            <form>              <!-- like we did with tree-->
+              <field name="name"/>
+            </form>
+          </field>
+        </field>
+      </field>
+    </record>
+
+
+
+
+    <!-- Car Engine list view definition -->
+
+    <record id="Car_engine_list_view" model="ir.ui.view">
+      <field name="name">car.engine.list.view</field>
+      <field name="model">car.engine</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="car_id"/>
+        </tree>
+      </field>
+    </record>
+
+    <record id="Car_engine_form_view" model="ir.ui.view">
+      <field name="name">car.engine.form.view</field>
+      <field name="model">car.engine</field>
+      <field name="arch" type="xml">
+        <form>
+          <group>
+            <group>
+              <field name="name"/>
+              <field name="car_id"/>
+            </group>
+          </group>
+        </form>
+      </field>
+    </record>
+
+
+
+    <!-- actions opening student views on models -->
+
+    <record model="ir.actions.act_window" id="school_student.action_window">
+      <field name="name">school_student window</field>
+      <field name="res_model">school.student</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- actions opening hobby views on models -->
+
+    <record model="ir.actions.act_window" id="school_student.hobby_action_window">
+      <field name="name">Hobby</field>
+      <field name="res_model">hobby</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+
+    <record model="ir.actions.act_window" id="school_student.car_engine_action_window">
+      <field name="name">Car Engine Menu</field>
+      <field name="res_model">car.engine</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+
+    <!-- server action to the one above -->
+
+    <record model="ir.actions.server" id="school_student.action_server">
+      <field name="name">school_student server</field>
+      <field name="model_id" ref="model_school_student"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record>
+
+
+    <!-- Top menu item -->
+
+    <menuitem name="school_student" id="school_student.menu_root"/>
+
+    <!-- menu categories -->
+
+    <menuitem name="Menu 1" id="school_student.menu_1" parent="school_student.menu_root"/>
+    <menuitem name="Menu 2" id="school_student.menu_2" parent="school_student.menu_root"/>
+
+    <!-- actions -->
+
+    <menuitem name="List" id="school_student.menu_1_list" parent="school_student.menu_1" action="school_student.action_window"/>
+    <menuitem name="Server to list" id="school_student" parent="school_student.menu_2" action="school_student.action_server"/>
+    <menuitem name="Hobby" id="hobby_student" parent="school_student.menu_2" action="school_student.hobby_action_window"/>
+    <menuitem name="Car Engine" id="car_engine_action" parent="school_student.menu_2" action="school_student.car_engine_action_window"/>
+
+  </data>
+</odoo>

@@ -1,0 +1,83 @@
+<odoo>
+
+    <!-- Add by me start-->
+
+    <record id="view_me_remaining_holiday_graph" model="ir.ui.view">
+        <field name="name">hr.holidays.me.remaining.report_graph</field>
+        <field name="model">hr.leave</field>
+        <field name="priority">20</field>
+        <field name="arch" type="xml">
+            <field name="number_of_Remaining_days" invisible="1"/>
+            <graph string="Remaining Leaves" sample="1">
+                <field name="employee_id"/>
+                <field name="number_of_Remaining_days" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Add by me end-->
+
+
+    <!-- Add by me start -->
+
+    <record id="action_hr_remaining_holidays_report" model="ir.actions.act_window">
+        <field name="name">My Remaining Leaves Analysis</field>
+        <field name="res_model">hr.leave</field>
+        <field name="view_mode">graph</field>
+        <field name="context">{'search_default_year': 1, 'search_default_group_employee': 1, 'search_default_group_type': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No data yet!
+            </p>
+        </field>
+    </record>
+
+    <record id="action_window_my_remaining_leave_graph" model="ir.actions.act_window.view">
+        <field name="sequence" eval="4"/>
+        <field name="view_mode">graph</field>
+        <field name="view_id" ref="view_me_remaining_holiday_graph"/>
+        <field name="act_window_id" ref="action_hr_remaining_holidays_report"/>
+    </record>
+
+<!--
+    <record id="action_hr_emp_remaining_holidays_report" model="ir.actions.act_window">
+        <field name="name">Employees Remaining Leaves Analysis</field>
+        <field name="res_model">hr.leave</field>
+        <field name="view_mode">graph</field>
+        <field name="context">{'search_default_year': 1, 'search_default_group_employee': 1, 'search_default_group_type': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No data yet!
+            </p>
+        </field>
+    </record>
+
+    <record id="action_window_employees_remaining_leave_graph" model="ir.actions.act_window.view">
+        <field name="sequence" eval="5"/>
+        <field name="view_mode">graph</field>
+        <field name="view_id" ref="hr_holidays.view_holiday_graph"/>
+        <field name="act_window_id" ref="action_hr_emp_remaining_holidays_report"/>
+    </record>
+-->
+    <!-- Add by me end -->
+
+
+    <!-- Add by me -->
+
+    <menuitem
+        id="menu_hr_remaining_holidays_report"
+        name="My Remaining Leaves"
+        parent="hr_holidays.menu_hr_holidays_report"
+        action="action_hr_remaining_holidays_report"
+        sequence="4"/>
+
+    <!--menuitem
+        id="menu_hr_emp_remaining_holidays_report"
+        name="Employees Remaining Leaves"
+        parent="hr_holidays.menu_hr_holidays_report"
+        action="action_hr_emp_remaining_holidays_report"
+        sequence="5"/-->
+
+    <!-- Add by me --> 
+
+</odoo>

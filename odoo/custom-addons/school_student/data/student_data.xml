@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- eval will run the python code-->
+    <function model="school.student" name="_change_roll_number" eval="('INZO',)"/>
+</odoo>
