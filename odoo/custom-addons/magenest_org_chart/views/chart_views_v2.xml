@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+        <menuitem id="menu_org_chart_v2"
+                  name="Chart V2"
+                  parent="hr.menu_hr_root"
+                  sequence="5"/>
+
+        <record id="action_org_chart_department_v2" model="ir.actions.client">
+            <field name="name">Department Chart V2</field>
+            <field name="tag">org_chart_department_v2</field>
+        </record>
+
+        <menuitem id="menu_org_chart_department_2"
+                  name="Department Chart 2"
+                  action="action_org_chart_department_v2"
+                  parent="menu_org_chart_v2"
+                  sequence="0"/>
+
+        <record id="action_org_chart_employee_v2" model="ir.actions.client">
+            <field name="name">Employee Chart V2</field>
+            <field name="tag">org_chart_employee_v2</field>
+        </record>
+
+        <menuitem id="menu_org_chart_employee_2"
+                  name="Employee Chart 2"
+                  action="action_org_chart_employee_v2"
+                  parent="menu_org_chart_v2"
+                  sequence="0"/>
+
+</odoo>

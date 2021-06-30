@@ -7,7 +7,6 @@ from odoo import models, fields, api, _
 
 class Project(models.Model):
     _inherit = "project.project"
-    is_call_on_duty = fields.Boolean()
     allow_timesheet_timer = fields.Boolean(
         'Timesheet Timer',
         compute='_compute_allow_timesheet_timer',
@@ -34,19 +33,10 @@ class Project(models.Model):
         return result
 
     def unlink(self):
-        """
-            We will remove only project with 0 timesheet
-        """
-        print('/*********************//////////')
+
         for project in self:
             if not project.timesheet_ids:
                 return super().unlink()
             else:
                 raise ValidationError(_('You are not allowed to delete a project with timesheet'))
         return False
-
-    """def _check_has_timesheet(self, project):
-        print(project.id)
-        print(self.env['account.analytic.line'].search_count([('project_id', '==', project.id)]))
-        return self.env['account.analytic.line'].search_count([('project_id', '==', project.id)]) > 0
-    """

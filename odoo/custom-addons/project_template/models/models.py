@@ -32,9 +32,7 @@ class Project(models.Model):
             if vals.get('project_template_id', False):
                 vals = self._create_Task_From_Template(vals)
 
-        print(vals)
         return super(Project, self).write(vals)
-
 
     def _create_Task_From_Template(self, vals):
 
@@ -59,8 +57,6 @@ class Project(models.Model):
 
 class Task(models.Model):
     _inherit = "project.task"
-
-
 class project_template(models.Model):
     _name = 'project.project.template'
     _description = 'Create project templates used later to inti a new created project'

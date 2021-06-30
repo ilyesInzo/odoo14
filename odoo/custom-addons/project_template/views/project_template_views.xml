@@ -66,8 +66,6 @@
       </field>
     </record>
 
-  <!-- attrs="{'readonly': [('created_from_template','==',True)]}" -->
-
     <record id="project_project_template_view_form_simplified" model="ir.ui.view">
       <field name="name">project.project.template.view.form.simplified</field>
       <field name="model">project.project</field>
@@ -81,7 +79,6 @@
       </field>
     </record>
 
-    <!-- attrs="{'invisible': [('created_from_template','==',True)]}" -->
 
     <!-- actions -->
 
@@ -102,121 +99,6 @@
     <!-- menu categories -->
     
     <menuitem name="Project Templates" id="project_template_menu" parent="project.menu_project_config" action="project_template_action_window" sequence="5"/>
-
-
-
-
-
-    <!--
-          <field name="use_template"/>
-          <field name="project_template_id" attrs="{'required': [('use_template','==',True)], 'invisible': [('use_template','==',False)]}"/>
-          -->
-
-
-    <!-- not working -->
-    <!--
-    <record id="edit_project_template_extend_hr" model="ir.ui.view">
-        <field name="name">project.project.form.template.extend.hr</field>
-        <field name="model">project.project</field>
-        <field name="inherit_id" ref="project_extension.edit_project_responsible_extend"/>
-        <field name="groups_id" eval="[(6, 0, [ref('project_extension.group_project_responsible') ])]"/>
-        <field name="mode">primary</field>
-        <field name="priority">2</field>
-        <field name="arch" type="xml">
-            <xpath expr="//sheet/notebook/page[@name='settings']/group/group/field[@name='user_id']" position="after">
-                <field name="use_template"/>
-            </xpath>
-        </field>
-    </record>
-
-    <record id="edit_project_template_extend_manager" model="ir.ui.view">
-        <field name="name">project.project.form.template.extend.manager</field>
-        <field name="model">project.project</field>
-        <field name="inherit_id" ref="project_extension.edit_project_manager_extend"/>
-        <field name="groups_id" eval="[(6, 0, [ref('project.group_project_manager') ])]"/>
-        <field name="mode">primary</field>
-        <field name="priority">1</field>
-        <field name="arch" type="xml">
-            <xpath expr="//sheet/notebook/page[@name='settings']/group/group/field[@name='user_id']" position="after">
-                <field name="use_template"/>
-            </xpath>
-        </field>
-    </record>
--->
-    <!-- not working -->
-
-    <!--
-    <record id="project_project_template_view_extension_hr_responsible_form_simplified" model="ir.ui.view">
-        <field name="name">project.project.view.extension.hr.responsible.form.simplified</field>
-        <field name="model">project.project</field>
-        <field name="inherit_id" ref="project_extension.project_project_view_extension_hr_responsible_form_simplified"/>
-        <field name="groups_id" eval="[(6, 0, [ref('project_extension.group_project_responsible') ])]"/>
-        <field name="mode">primary</field>
-        <field name="priority">1</field>
-        <field name="arch" type="xml">
-            <field name="name" position="after">
-                <field name="use_template"/>
-            </field>
-        </field>
-    </record>
-    <record id="project_project_template_view_extension_hr_manager_form_simplified" model="ir.ui.view">
-        <field name="name">project.project.view.extension.hr.manager.form.simplified</field>
-        <field name="model">project.project</field>
-        <field name="inherit_id" ref="project_extension.project_project_view_extension_hr_manager_form_simplified"/>
-        <field name="groups_id" eval="[(6, 0, [ref('project.group_project_manager') ])]"/>
-        <field name="mode">primary</field>
-        <field name="priority">1</field>
-        <field name="arch" type="xml">
-            <field name="name" position="after">
-                <field name="use_template"/>
-            </field>
-        </field>
-    </record>
-
-    <record id="project.open_create_project" model="ir.actions.server">
-        <field name="name">open.create.project</field>
-        <field name="model_id" ref="model_project_project"/>
-        <field name="binding_model_id" ref="model_project_project"/>
-        <field name="state">code</field>
-        <field name="code">
-        action = model.open_create_project()
-        </field>
-    </record>
-  -->
-    <!-- not working -->
-    <!--record id="project_template_view_extension_form_simplified" model="ir.ui.view">
-        <field name="name">project.project.view.extension.form.simplified</field>
-        <field name="model">project.project</field>
-        <field name="inherit_id" ref="project.project_project_view_form_simplified"/>
-        <field name="mode">primary</field>
-        <field name="priority">1</field>
-        <field name="arch" type="xml">
-            <field name="name" position="after">
-                <field name="use_template"/>
-            </field>
-        </field>
-    </record-->
-
-
-
-
-    <!--record model="ir.actions.server" id="project_template.action_server">
-      <field name="name">project_template server</field>
-      <field name="model_id" ref="model_project_template_project_template"/>
-      <field name="state">code</field>
-      <field name="code">
-        action = {
-          "type": "ir.actions.act_window",
-          "view_mode": "tree,form",
-          "res_model": model._name,
-        }
-      </field>
-    </record-->
-
-
-
-
-
 
   </data>
 </odoo>
