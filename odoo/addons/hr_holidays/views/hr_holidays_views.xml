@@ -60,11 +60,12 @@
         action="hr_leave_allocation_action_approve_department"
         sequence="2"/>
 
+    <!-- removed to allow all user to display reports -->
+    <!--         groups="hr_holidays.group_hr_holidays_manager"  -->
     <menuitem
         id="menu_hr_holidays_report"
         name="Reporting"
         parent="menu_hr_holidays_root"
-        groups="hr_holidays.group_hr_holidays_manager"
         sequence="4"/>
 
     <menuitem

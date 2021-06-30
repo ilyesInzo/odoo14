@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--menuitem name="Project" id="project.menu_main_pm" groups="project.group_project_manager" web_icon="project,static/description/icon.png" sequence="50"/-->
+
+
+    <!-- Effective Code -->
+
+
+    <!--delete model="ir.ui.menu" id="project.menu_project_management">
+
+        <menuitem name="Tasks" id="project.menu_project_management" parent="project.menu_main_pm" action="project.action_view_all_task" sequence="2" groups="project.group_project_manager"-->
+
+    <!-- Project-->
+
+
+
+    <record id="project.project_project_view_form_simplified_footer" model="ir.ui.view">
+        <field name="name">project.project.view.form.simplified</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.project_project_view_form_simplified"/>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <xpath expr="//group" position="after">
+                  <field name="task_ids" nolabel="1">
+                    <tree editable="top">
+                      <field name="name" string="Task"/>
+                    </tree>
+                    <form>
+                      <field name="name"/>
+                    </form>
+                  </field>
+                <footer>
+                    <button string="Create" name="action_view_tasks" type="object" class="btn-primary o_open_tasks"/>
+                    <button string="Discard" class="btn-secondary" special="cancel"/>
+                </footer>
+            </xpath>
+            <field name="name" position="after">
+                <field name="isResponsible" invisible="1"/>
+                <field name="department_primary_id" attrs="{'readonly': [('isResponsible', '=', True)]}"/>
+                <field name="department_secondary_id" widget="many2many_tags"/>
+            </field>
+            <xpath expr="//field[@name='user_id']" position="attributes">
+                <attribute name="invisible">0</attribute>
+                <attribute name="required">1</attribute>
+                <attribute name="attrs">{'readonly': [('isResponsible', '=', True)]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="attrs">{'readonly': [('id', '!=', False)]}</attribute>
+            </xpath>
+
+            <!--field name="user_id" position="after">
+                <field name="project_planned_duration"/>
+            </field-->
+        </field>
+    </record>
+
+
+    <!-- Old view model inheritance-->
+    <!--record id="project_project_view_extension_form_simplified" model="ir.ui.view">
+        <field name="name">project.project.view.extension.form.simplified</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.project_project_view_form_simplified"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="department_primary_id"/>
+                <field name="department_secondary_id" widget="many2many_tags"/>
+            </field>
+            <xpath expr="//field[@name='user_id']" position="attributes">
+                <attribute name="invisible">0</attribute>
+                <attribute name="required">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="attrs">{'readonly': [('id', '!=', False)]}</attribute>
+            </xpath>
+            <field name="user_id" position="after">
+                <field name="project_planned_duration"/>
+            </field>
+        </field>
+    </record-->
+
+    <!-- form displayed for the manager-->
+    <!--record id="project_project_view_extension_hr_responsible_form_simplified" model="ir.ui.view">
+        <field name="name">project.project.view.extension.hr.responsible.form.simplified</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project_project_view_extension_form_simplified"/>
+        <field name="groups_id" eval="[(6, 0, [ref('group_project_responsible') ])]"/>
+        <field name="mode">primary</field>
+        <field name="priority">22</field>
+        <field name="arch" type="xml">
+        <field name="department_primary_id" position="attributes">
+            <attribute name="readonly">1</attribute>
+        </field>
+        <field name="user_id" position="attributes">
+            <attribute name="readonly">1</attribute>
+        </field>
+        </field>
+    </record-->
+    <!-- form displayed for the admin-->
+    <!--record id="project_project_view_extension_hr_manager_form_simplified" model="ir.ui.view">
+        <field name="name">project.project.view.extension.hr.manager.form.simplified</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project_project_view_extension_form_simplified"/>
+        <field name="groups_id" eval="[(6, 0, [ref('project.group_project_manager') ])]"/>
+        <field name="mode">primary</field>
+        <field name="priority">22</field>
+        <field name="arch" type="xml">
+        <field name="department_primary_id" position="attributes">
+            <attribute name="readonly">0</attribute>
+        </field>
+        <field name="user_id" position="attributes">
+            <attribute name="readonly">0</attribute>
+        </field>
+        </field>
+    </record-->
+   
+   
+    <!-- old action inherit-->
+    <!--record id="project.open_create_project" model="ir.actions.act_window">
+        <field name="name">Create a Project hr</field>
+        <field name="res_model">project.project</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="project_project_view_extension_form_simplified"/>
+        <field name="target">new</field>
+    </record-->
+
+    <!--record id="project_new_open" model="ir.actions.server">
+        <field name="name">open.create.project</field>
+        <field name="model_id" ref="model_project_project"/>
+        <field name="binding_model_id" ref="model_project_project"/>
+        <field name="state">code</field>
+        <field name="code">
+        action = model.open_create_project()
+        </field>
+    </record-->
+
+    <record id="edit_project_responsible_extend" model="ir.ui.view">
+        <field name="name">project.project.form.responsible.extend</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project"/>
+        <field name="groups_id" eval="[(6, 0, [ref('group_project_responsible') ])]"/>
+        <field name="mode">primary</field>
+        <field name="priority">1</field>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/notebook/page[@name='settings']/group/group/field[@name='user_id']" position="before">
+                <field name="department_primary_id" readonly='1'/>
+                <field name="department_secondary_id" widget="many2many_tags"/>
+            </xpath>
+
+            <xpath expr="//sheet/notebook/page[@name='settings']/group/group/field[@name='user_id']" position="attributes">
+                <attribute name="required">1</attribute>
+                <attribute name="readonly">1</attribute>
+            </xpath>
+
+            <xpath expr="//sheet/div[@class='oe_title']/h1/field[@name='name']" position="attributes">
+                <attribute name="attrs">{'readonly': [('id', '!=', False)]}</attribute>
+            </xpath>
+
+            <!--xpath expr="//sheet/notebook/page[@name='settings']/group/group/field[@name='user_id']" position="after">
+                <field name="project_planned_duration"/>
+            </xpath-->
+        </field>
+    </record>
+
+    <record id="edit_project_manager_extend" model="ir.ui.view">
+        <field name="name">project.project.form.manager.extend</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project"/>
+        <field name="groups_id" eval="[(6, 0, [ref('project.group_project_manager') ])]"/>
+        <field name="mode">primary</field>
+        <field name="priority">1</field>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/notebook/page[@name='settings']/group/group/field[@name='user_id']" position="before">
+                <field name="department_primary_id" readonly='0'/>
+                <field name="department_secondary_id" widget="many2many_tags"/>
+            </xpath>
+
+            <xpath expr="//sheet/notebook/page[@name='settings']/group/group/field[@name='user_id']" position="attributes">
+                <attribute name="required">1</attribute>
+                <attribute name="readonly">0</attribute>
+            </xpath>
+
+            <xpath expr="//sheet/div[@class='oe_title']/h1/field[@name='name']" position="attributes">
+                <attribute name="attrs">{'readonly': [('id', '!=', False)]}</attribute>
+            </xpath>
+
+            <!--xpath expr="//sheet/notebook/page[@name='settings']/group/group/field[@name='user_id']" position="after">
+                <field name="project_planned_duration"/>
+            </xpath-->
+        </field>
+    </record>
+
+
+    <!-- Task-->
+
+    <record id="quick_create_task_form_responsible_extend" model="ir.ui.view">
+        <field name="name">project.task.form.quick_create.responsible.extend</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.quick_create_task_form"/>
+        <field name="groups_id" eval="[(6, 0, [ref('group_project_responsible')])]"/>
+        <field name="arch" type="xml">
+            <!-- only manager's projects could be choosen-->
+            <xpath expr="//field[@name='project_id']" position="attributes">
+                <attribute name="domain">[('user_id', '=', uid)]</attribute>
+            </xpath>
+            <!-- domain will be set in the python code-->
+            <xpath expr="//field[@name='user_id']" position="attributes">
+                 <attribute name="domain"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="quick_create_task_form_hr_extend" model="ir.ui.view">
+        <field name="name">project.task.form.quick_create.hr.extend</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.quick_create_task_form"/>
+        <field name="groups_id" eval="[(6, 0, [ref('project.group_project_manager')])]"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='project_id']" position="attributes">
+                <attribute name="domain">[]</attribute>
+            </xpath>
+            <xpath expr="//field[@name='user_id']" position="attributes">
+                 <attribute name="domain"/>
+            </xpath>
+        </field>
+    </record>
+
+
+    <!--record id="project.quick_create_task_form" model="ir.actions.server">
+        <field name="name">open.create.task</field>
+        <field name="model_id" ref="model_project_task"/>
+        <field name="binding_model_id" ref="model_project_task"/>
+        <field name="state">code</field>
+        <field name="code">
+        action = model.open_create_task()
+        </field>
+    </record-->
+
+    <!-- the user_id domain will be added in the model and the rules will be checked-->
+    <!-- the xml domain is removed here because it is overriding the python code = xml higher priority-->
+    <record id="view_task_form2_extend" model="ir.ui.view">
+        <field name="name">view.task.form2.extend</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group/group/field[@name='user_id']" position="attributes">
+                 <attribute name="domain"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- normal user canno't assign task to another-->
+    <record id="view_task_tree2_user_extend" model="ir.ui.view">
+        <field name="name">view.task.tree2.user.extend</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_tree2"/>
+        <field name="groups_id" eval="[(6, 0, [ref('project.group_project_user')])]"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='user_id']" position="attributes">
+                 <attribute name="readonly">1</attribute>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_task_tree2_hr_extend" model="ir.ui.view">
+        <field name="name">view.task.tree2.hr.extend</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_tree2"/>
+        <field name="groups_id" eval="[(6, 0, [ref('group_project_responsible')])]"/> 
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='user_id']" position="attributes">
+                 <attribute name="readonly">0</attribute>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

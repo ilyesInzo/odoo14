@@ -41,3 +41,6 @@ setup/win32/static/postgresql*.exe
 /src/
 /doc/
 /debian/
+
+/odoo/addons/
+/odoo/open-hrm-addons/

@@ -1,83 +1,31 @@
 <odoo>
 
-    <!-- Add by me start-->
+    <!-- change grom window action to server to apply different domain based on some conditions-->
 
-    <record id="view_me_remaining_holiday_graph" model="ir.ui.view">
-        <field name="name">hr.holidays.me.remaining.report_graph</field>
-        <field name="model">hr.leave</field>
-        <field name="priority">20</field>
-        <field name="arch" type="xml">
-            <field name="number_of_Remaining_days" invisible="1"/>
-            <graph string="Remaining Leaves" sample="1">
-                <field name="employee_id"/>
-                <field name="number_of_Remaining_days" type="measure"/>
-            </graph>
+    <record id="action_hr_available_holidays_report" model="ir.actions.server">
+        <field name="name">Time Off Analysis</field>
+        <field name="model_id" ref="model_hr_leave"/>
+        <field name="binding_model_id" ref="model_hr_leave"/>
+        <field name="state">code</field>
+        <field name="groups_id" eval="[(4, ref('base.group_user'))]"/>
+        <field name="code">
+        action = model.action_by_employee()
         </field>
     </record>
 
-    <!-- Add by me end-->
+    <!-- I will remove the old menu and replace it by server action so i can check user access and give different domain filter-->
+    <!-- a different way could be: edit the action by adding domain based on rules-->
+    <delete model="ir.ui.menu" id="hr_holidays.menu_hr_available_holidays_report_tree"/>
 
 
-    <!-- Add by me start -->
+    <menuitem id="menu_hr_available_holidays_report_tree" name="by Employee" parent="hr_holidays.menu_hr_holidays_report" action="action_hr_available_holidays_report" sequence="1"/>
 
-    <record id="action_hr_remaining_holidays_report" model="ir.actions.act_window">
-        <field name="name">My Remaining Leaves Analysis</field>
-        <field name="res_model">hr.leave</field>
-        <field name="view_mode">graph</field>
-        <field name="context">{'search_default_year': 1, 'search_default_group_employee': 1, 'search_default_group_type': 1}</field>
-        <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">
-                No data yet!
-            </p>
-        </field>
-    </record>
+    <!-- menu for remaining report-->
 
-    <record id="action_window_my_remaining_leave_graph" model="ir.actions.act_window.view">
-        <field name="sequence" eval="4"/>
-        <field name="view_mode">graph</field>
-        <field name="view_id" ref="view_me_remaining_holiday_graph"/>
-        <field name="act_window_id" ref="action_hr_remaining_holidays_report"/>
-    </record>
+    <menuitem id="menu_hr_remaining_holidays_report" name="My Remaining Leaves" parent="hr_holidays.menu_hr_holidays_report" action="action_hr_leave_remaining_report_holidays_report" sequence="4"/>
 
-<!--
-    <record id="action_hr_emp_remaining_holidays_report" model="ir.actions.act_window">
-        <field name="name">Employees Remaining Leaves Analysis</field>
-        <field name="res_model">hr.leave</field>
-        <field name="view_mode">graph</field>
-        <field name="context">{'search_default_year': 1, 'search_default_group_employee': 1, 'search_default_group_type': 1}</field>
-        <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">
-                No data yet!
-            </p>
-        </field>
-    </record>
-
-    <record id="action_window_employees_remaining_leave_graph" model="ir.actions.act_window.view">
-        <field name="sequence" eval="5"/>
-        <field name="view_mode">graph</field>
-        <field name="view_id" ref="hr_holidays.view_holiday_graph"/>
-        <field name="act_window_id" ref="action_hr_emp_remaining_holidays_report"/>
-    </record>
--->
-    <!-- Add by me end -->
+    <menuitem id="menu_hr_emp_remaining_holidays_report" name="Employees Remaining Leaves" parent="hr_holidays.menu_hr_holidays_report" action="action_hr_emp_leave_remaining_report_holidays_report" groups="hr_holidays.group_hr_holidays_responsible" sequence="5"/>
 
 
-    <!-- Add by me -->
-
-    <menuitem
-        id="menu_hr_remaining_holidays_report"
-        name="My Remaining Leaves"
-        parent="hr_holidays.menu_hr_holidays_report"
-        action="action_hr_remaining_holidays_report"
-        sequence="4"/>
-
-    <!--menuitem
-        id="menu_hr_emp_remaining_holidays_report"
-        name="Employees Remaining Leaves"
-        parent="hr_holidays.menu_hr_holidays_report"
-        action="action_hr_emp_remaining_holidays_report"
-        sequence="5"/-->
-
-    <!-- Add by me --> 
 
 </odoo>

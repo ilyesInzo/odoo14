@@ -23,7 +23,15 @@
 
     # always loaded
     'data': [
-        'views/hr_leave_extend_views.xml'
+        'security/ir.model.access.csv',
+
+        'report/hr_leave_remaining_report.xml',
+        'report/hr_emp_leave_remaining_report.xml',
+        'report/hr_leave_by_employee_filter_views.xml',
+
+
+        'views/hr_leave_extend_views.xml',
+        #'views/hr_leave_template.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

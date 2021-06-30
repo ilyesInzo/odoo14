@@ -496,7 +496,6 @@ class HolidaysRequest(models.Model):
 
     @api.depends('number_of_days')
     def _compute_number_of_hours_display(self):
-        print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXS")
         for holiday in self:
             calendar = holiday._get_calendar()
             if holiday.date_from and holiday.date_to:

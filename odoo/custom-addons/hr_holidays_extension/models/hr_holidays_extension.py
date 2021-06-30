@@ -1,18 +1,37 @@
 
-from odoo import api, fields, models, tools
-
+from odoo import api, fields, models, tools, _
+from odoo.osv import expression
 class HolidaysRequest(models.Model):
     _inherit = 'hr.leave'
 
-    # adding bu me start
-    number_of_Remaining_days = fields.Float(string="Remaining Days", compute='_compute_number_of_Remaining_days', store=True, default=5)
-    # adding bu me end
+    @api.model
+    def action_by_employee(self):
 
+        domain = []
+        # if not manager = normal user 
+        if not self.user_has_groups('hr_holidays.group_hr_holidays_responsible'):
+            domain = expression.AND([
+                domain,
+                [('employee_id.user_id', '=', self._uid)]
+            ])
+        # if not admin but manager ( as it pass the first condition )
+        elif not self.user_has_groups('hr_holidays.group_hr_holidays_manager'):
+            domain = expression.AND([
+                domain,
+                ['|',('employee_id.parent_id.user_id', '=', self._uid),('employee_id.user_id', '=', self._uid)]
+            ])
+        # else Hr or Admin no restriction
+        else:
+            pass
 
-    # add new Start
-    def _compute_number_of_Remaining_days(self):
-        print('Laslousa')
-        for holiday in self:
-            print(holiday.number_of_days)
-            holiday.number_of_Remaining_days = 5
-    # add new End
+        return {
+            'name': _('Time Off Analysis'),
+            'type': 'ir.actions.act_window',
+            'res_model': 'hr.leave',
+            'view_mode': 'graph,pivot,calendar,form',
+            'search_view_id': self.env.ref('hr_holidays_extension.view_hr_by_employee_holidays_filter_report').id,
+            'domain': domain,
+            'context': {'search_default_year': 1, 
+            'search_default_group_employee': 1, 
+            'search_default_group_type': 1}
+        }

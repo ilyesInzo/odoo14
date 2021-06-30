@@ -64,7 +64,6 @@ class school_student(models.Model):
     # otherwise the value will change after save
     @api.depends("bDate")
     def _get_age_from_student(self):
-        print("calculating")
         today_date = datetime.date.today()
         for stud in self:
             if stud.bDate:
@@ -100,6 +99,8 @@ class school_student(models.Model):
     def create(self, vals_list):
         vals_list["active"] = True  # for exemple
         rlt = super().create(vals_list)
+        print('/********************/')
+        print(vals_list)
         # rlt.active=True we can also do this and change value after callinf the super method
         return rlt
 

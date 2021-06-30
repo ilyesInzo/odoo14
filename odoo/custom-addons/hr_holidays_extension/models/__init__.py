@@ -1,1 +1,1 @@
-from . import hr_holidays_extension
+from . import hr_holidays_extension, hr_leave_type_extension
