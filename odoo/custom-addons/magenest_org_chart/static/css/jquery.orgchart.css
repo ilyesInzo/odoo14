@@ -20,7 +20,7 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    background-image: linear-gradient(90deg, rgba(200, 0, 0, 0.15) 10%, rgba(0, 0, 0, 0) 10%), linear-gradient(rgba(200, 0, 0, 0.15) 10%, rgba(0, 0, 0, 0) 10%);
+    /*background-image: linear-gradient(90deg, rgba(200, 0, 0, 0.15) 10%, rgba(0, 0, 0, 0) 10%), linear-gradient(rgba(200, 0, 0, 0.15) 10%, rgba(0, 0, 0, 0) 10%);*/
     background-size: 10px 10px;
     border: 1px dashed rgba(0, 0, 0, 0);
     padding: 20px;
@@ -275,7 +275,7 @@
     border: 1px solid rgba(88, 112, 217, 0.8);
     border-radius: 0 0 4px 4px;
     text-align: center;
-    background-color: #fff;
+    /*background-color: #fff;*/
     color: #333;
     text-overflow: ellipsis;
     white-space: nowrap;

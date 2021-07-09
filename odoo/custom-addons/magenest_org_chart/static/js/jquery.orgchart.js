@@ -754,9 +754,11 @@
             }
         },
         //
-        nodeClickHandler: function (event) {
+        nodeClickHandler: function (arg, event,) {
             this.$chart.find('.focused').removeClass('focused');
+            console.log('value')
             $(event.delegateTarget).addClass('focused');
+            this.options.callFlieg(arg)
         },
         // load new nodes by ajax
         loadNodes: function (rel, url, $edge) {
@@ -1274,9 +1276,8 @@
                         .children('.title').prepend('<i class="oci ' + opts.parentNodeSymbol + ' symbol"></i>');
                 }
             }
-
             $nodeDiv.on('mouseenter mouseleave', this.nodeEnterLeaveHandler.bind(this));
-            $nodeDiv.on('click', this.nodeClickHandler.bind(this));
+            $nodeDiv.on('click', this.nodeClickHandler.bind(this,data));
             $nodeDiv.on('click', '.topEdge', this.topEdgeClickHandler.bind(this));
             $nodeDiv.on('click', '.bottomEdge', this.bottomEdgeClickHandler.bind(this));
             $nodeDiv.on('click', '.leftEdge, .rightEdge', this.hEdgeClickHandler.bind(this));
@@ -1516,7 +1517,6 @@
             var isFf = !!window.sidebar;
             var isEdge = navigator.appName === 'Microsoft Internet Explorer' || (navigator.appName === "Netscape" && navigator.appVersion.indexOf('Edge') > -1);
             var $chartContainer = this.$chartContainer;
-
             if ((!isWebkit && !isFf) || isEdge) {
                 window.navigator.msSaveBlob(canvas.msToBlob(), exportFilename + '.png');
             } else {

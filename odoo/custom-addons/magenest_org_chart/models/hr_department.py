@@ -25,12 +25,16 @@ class HrDepartment(models.Model):
                     "name": str(department.name) + "(" + str(total) + ")",
                     "children": children,
                     "title": str(department.manager_id.name) if department.manager_id else "",
+                    "id": department.id,
+                    "type": "department",
                 }
                 list_child.append(department_data)
         Root_data["children"] = list_child
         for data in list_child:
             final_total += self.count_children(data, 0)
         Root_data["title"] = "(" + str(final_total) + ")"
+        Root_data["type"] = "company"
+        Root_data["id"] = self.env.company.id
         return Root_data
 
     def get_child_department(self, parent_department):

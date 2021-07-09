@@ -4,13 +4,10 @@
                   inherit_id="web.assets_backend">
             <xpath expr="." position="inside">
                 <script src="/magenest_org_chart/static/js/jquery.orgchart.js"></script>
-                <!--                <script src="/magenest_org_chart/static/js/jquery.min.js"></script>-->
-                <script src="/magenest_org_chart/static/js/org_chart_employee_v2.js"></script>
+                <!--script src="/magenest_org_chart/static/js/org_chart_employee_v2.js"></script-->
                 <script src="/magenest_org_chart/static/js/org_chart_department_v2.js"></script>
                 <script src="/magenest_org_chart/static/js/html2canvas.js"></script>
                 <script src="/magenest_org_chart/static/js/jspdf.min.js"></script>
-
-                <!--                <script src="/magenest_org_chart/static/js/org_chart_employee.js"></script>-->
             </xpath>
         </template>
 

@@ -809,7 +809,7 @@ class AnalyticLine(models.Model):
         }   
 
         analytic_lines = self.filtered_domain([('state', '=', 'draft')])
-        print(analytic_lines)
+        #print(analytic_lines)
         if analytic_lines:
             analytic_lines.write({'state':'confirm'})
         else:

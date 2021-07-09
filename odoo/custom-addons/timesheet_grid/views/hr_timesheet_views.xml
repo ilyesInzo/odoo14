@@ -119,12 +119,11 @@
                                 <field name="company_id" invisible="1"/>
                                 <field name="validated" invisible="1"/>
                                 <field name="timer_start" invisible="1"/>
-                                <field name="project_id" options="{'no_create_edit': True}" class="o_timesheet_tour_project_name" context="{'form_view_ref': 'project.project_project_view_form_simplified',}" attrs="{'readonly': [('id', '!=', False), ('validated', '=', True)], 'invisible': [ ('call_on_duty', '=', True)], 'required': [ ('call_on_duty', '=', False)]}"/>
-                                <field name="task_id" options="{'no_create_edit': True}" context="{'default_project_id': project_id}" class="o_timesheet_tour_task_name" attrs="{'readonly': [('id', '!=', False), ('validated', '=', True)], 'invisible': [ ('call_on_duty', '=', True)]}" widget="task_with_hours"/>
+                                <field name="project_id" options="{'no_create_edit': True}" class="o_timesheet_tour_project_name" context="{'form_view_ref': 'project.project_project_view_form_simplified',}" attrs="{'readonly': [('id', '!=', False), ('validated', '=', True)]}"/>
+                                <field name="task_id" options="{'no_create_edit': True}" context="{'default_project_id': project_id}" class="o_timesheet_tour_task_name" attrs="{'readonly': [('id', '!=', False), ('validated', '=', True)]}" widget="task_with_hours"/>
                                 <field name="user_id" invisible="1" groups="hr_timesheet.group_hr_timesheet_approver"/>
                                 <field name="employee_id" required="1" groups="hr_timesheet.group_hr_timesheet_approver" attrs="{'readonly': [('id', '!=', False), ('validated', '=', True)]}"/>
-                                <field name="night_shift" attrs="{'invisible': [ ('call_on_duty', '=', True)]}"/>
-                                <field name="call_on_duty"/>
+                                <field name="night_shift" />
                             </group>
                             <group>
                                 <field name="date" attrs="{'readonly': [('id', '!=', False), ('validated', '=', True)]}"/>
@@ -770,7 +769,7 @@ if records:
     </record>
 
     
-        <menuitem name="Call-on Duty" id="menu_timesheet_grid_call_on_duty" parent="hr_timesheet.menu_hr_time_tracking" groups="hr_timesheet.group_hr_timesheet_approver" sequence="10" action="timesheet_call_on_duty_action"/>
+        <menuitem name="Call-on Duty" id="menu_timesheet_grid_call_on_duty" parent="hr_timesheet.menu_hr_time_tracking" groups="hr_timesheet.group_hr_timesheet_user" sequence="10" action="timesheet_call_on_duty_action"/>
 
 
     </data>

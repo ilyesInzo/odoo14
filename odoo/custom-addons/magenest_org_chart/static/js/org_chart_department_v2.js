@@ -1,4 +1,5 @@
 var department_data = {}
+var viewDepartmentfunction = {}
 odoo.define("magenest_org_chart.org_chart_department_v2", function (require) {
     "use strict";
     var tags = {};
@@ -20,6 +21,7 @@ odoo.define("magenest_org_chart.org_chart_department_v2", function (require) {
                     method: 'get_department_data_v2',
                 }).then(function (result) {
                     department_data = result
+                    viewDepartmentfunction = self.viewDepartment.bind(self)
                     self.render();
                 });
                 this.href = window.location.href;
@@ -43,6 +45,38 @@ odoo.define("magenest_org_chart.org_chart_department_v2", function (require) {
         },
         reload: function () {
             window.location.href = this.href;
+        },
+        viewDepartment: function (object) {
+
+            if (object.type == 'department'){
+                if (object.id) {
+                    var chart  = $('#chart-container')
+                    chart.remove()
+                    this.do_action({
+                        name: 'Departments',
+                        type: 'ir.actions.act_window',
+                        res_model: 'hr.department',
+                        res_id: object.id,
+                        view_mode: 'form',
+                        views: [[false, 'form']],
+                    })
+                }
+            }
+            else if (object.type == 'company')
+            {
+                if (object.id) {
+                    var chart  = $('#chart-container')
+                    chart.remove()
+                    this.do_action({
+                        name: 'Company',
+                        type: 'ir.actions.act_window',
+                        res_model: 'res.company',
+                        res_id: object.id,
+                        view_mode: 'form',
+                        views: [[false, 'form']],
+                    })
+                }
+            }
         }
     });
 

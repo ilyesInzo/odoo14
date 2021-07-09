@@ -1,31 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
 
-        <menuitem id="menu_org_chart_v2"
+        <!--menuitem id="menu_org_chart_v2"
                   name="Chart V2"
                   parent="hr.menu_hr_root"
-                  sequence="5"/>
+                  sequence="5"/-->
 
         <record id="action_org_chart_department_v2" model="ir.actions.client">
             <field name="name">Department Chart V2</field>
             <field name="tag">org_chart_department_v2</field>
         </record>
 
-        <menuitem id="menu_org_chart_department_2"
-                  name="Department Chart 2"
-                  action="action_org_chart_department_v2"
-                  parent="menu_org_chart_v2"
-                  sequence="0"/>
+            <delete model="ir.ui.menu" id="hr.menu_hr_department_kanban" />
 
-        <record id="action_org_chart_employee_v2" model="ir.actions.client">
+            <menuitem
+                id="menu_departments"
+                name="Departments"
+                parent="hr.menu_hr_root"
+                groups="hr.group_hr_user"/>
+
+            <menuitem
+                id="menu_hr_department_kanban"
+                name="Departments"
+                action="hr.hr_department_kanban_action"
+                parent="menu_departments"
+                sequence="0"
+                />
+
+        <menuitem id="menu_org_chart_department_2"
+                  name="Organizational chart"
+                  action="action_org_chart_department_v2"
+                  parent="menu_departments"
+                  sequence="1"/>
+
+        <!--record id="action_org_chart_employee_v2" model="ir.actions.client">
             <field name="name">Employee Chart V2</field>
             <field name="tag">org_chart_employee_v2</field>
-        </record>
+        </record-->
 
-        <menuitem id="menu_org_chart_employee_2"
+        <!--menuitem id="menu_org_chart_employee_2"
                   name="Employee Chart 2"
                   action="action_org_chart_employee_v2"
                   parent="menu_org_chart_v2"
-                  sequence="0"/>
+                  sequence="0"/-->
 
 </odoo>
