@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="assets_backend" name="calendar employee list" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/multi_calendar/static/src/js/list.js"/>
+            </xpath>
+        </template>
+    </data>
+</odoo>

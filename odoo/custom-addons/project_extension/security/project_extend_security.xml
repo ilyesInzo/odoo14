@@ -8,14 +8,14 @@
     </record>
 
     <record id="project.group_project_manager" model="res.groups">
-        <field name="name">Administrator</field>
+        <field name="name">Project Admin</field>
         <field name="category_id" ref="base.module_category_services_project"/>
         <field name="implied_ids" eval="[(4, ref('group_project_responsible'))]"/>
         <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
     </record>
 
     <!-- Rules -->
-<data noupdate="1">
+<data noupdate="0">
     <!--record model="ir.rule" id="project_project_user_rule_task_update">
         <field name="name">Project: project user: modify/delete only his tasks</field>
         <field name="model_id" ref="model_project_task"/>
@@ -41,11 +41,25 @@
         <field name="groups" eval="[(4,ref('project.group_project_manager'))]"/>
     </record-->
 
-    <!--record model="ir.rule" id="project_project_responsible_rule_task_update_department">
-        <field name="name">Project: project responsible: see only project in his department</field>
+    <delete model="ir.rule" id="project.project_public_members_rule"/>
+
+    <record model="ir.rule" id="project_public_members_rule">
+        <field name="name">Project: Only invited users</field>
+        <field name="model_id" ref="model_project_project"/>
+        <field name="domain_force">[
+        ('department_primary_id.member_ids.user_id', 'in', [user.id]),
+        '|',
+            ('privacy_visibility', '!=', 'followers'),
+            ('allowed_internal_user_ids', 'in', user.ids),
+        ]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <!--record model="ir.rule" id="project_project_user_rule_visibility_update_department">
+        <field name="name">Project: project user: see only project in his department</field>
         <field name="model_id" ref="model_project_project"/>
         <field name="domain_force">[('department_primary_id.member_ids.user_id', 'in', [user.id])]</field>
-        <field name="groups" eval="[(4,ref('group_project_responsible'))]"/>
+        <field name="groups" eval="[(4,ref('base.group_user'))]"/>
     </record-->
 
 </data>

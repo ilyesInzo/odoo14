@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates>
+
+
+    <t t-extend="ListView.buttons" t-name="ExpensesListView.buttons">
+        <t t-jquery="button.o_list_button_add" t-operation="after">
+            <button type="button" class="btn btn-primary o_button_assigne_employees">
+                Add Employees
+            </button>
+        </t>
+    </t>
+
+</templates>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="calandar_calandar_1" model="calendar.calendar">
+            <field name="name">Global Calendar</field>
+            <field name="is_default" eval="True" />
+            <field name="start_time" eval="time.strftime('%Y-%m-%d')" />
+            <field name="sub_calendar" eval="no" />
+            <field name="time_ids" eval="[(0, 0, {'day': 'monday', 'work_Time': 8}),
+               (0, 0, {'day': 'tuesday', 'work_Time': 8}),
+               (0, 0, {'day': 'wednesday', 'work_Time': 8}),
+               (0, 0, {'day': 'thursday', 'work_Time': 8}),
+               (0, 0, {'day': 'friday', 'work_Time': 8}),
+               (0, 0, {'day': 'saturday', 'work_Time': 0}),
+               (0, 0, {'day': 'sunday', 'work_Time': 0})]" />
+        </record>
+    </data>
+</odoo>

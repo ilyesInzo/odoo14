@@ -52,8 +52,8 @@ odoo.define('timesheet_grid.GridRenderer', function (require) {
          * @private
          * @param {CustomEvent} ev
          */
-        _onGridCheckBoxClick(ev) {
-            this.rpc({
+        async _onGridCheckBoxClick(ev) {
+            await this.rpc({
                 model: 'call.duty',
                 method: 'action_on_call_duty',
                 args: [{
@@ -62,6 +62,10 @@ odoo.define('timesheet_grid.GridRenderer', function (require) {
                 }
                 ],
             })
+                var button = $('.grid_refresh')
+                if (button){
+                    button.trigger('click')
+                }
         }
 
     }

@@ -1,0 +1,144 @@
+<odoo>
+
+  <record id="calendar_calendar_search" model="ir.ui.view">
+    <field name="name">calendar.calendar.search</field>
+    <field name="model">calendar.calendar</field>
+    <field name="arch" type="xml">
+      <search string="Calendar">
+        <filter name="Default" domain="[('is_default', '=', 'true')]"/>
+        <filter name="Sub Calendar" domain="[('sub_calendar', '=', 'yes')]"/>
+      </search>
+    </field>
+  </record>
+
+  <record id="assigned_employees_action_window" model="ir.actions.act_window">
+    <field name="name">Assignees</field>
+    <field name="res_model">calendar.assignee</field>
+    <field name="view_mode">tree,form</field>
+    <field name="domain">[('calendar_id', '=', active_id)]</field>
+    <field name="context">{
+                'default_calendar_id': active_id,
+            }</field>
+  </record>
+
+  <record id="multi_calendar_form" model="ir.ui.view">
+    <field name="name">multi_calendar form</field>
+    <field name="model">calendar.calendar</field>
+    <field name="arch" type="xml">
+      <form >
+        <sheet>
+          <div class="oe_button_box" name="button_box" groups="base.group_user">
+            <!--button class="oe_stat_button" name="attachment_tree_view" type="object" icon="fa-file-text-o">
+              <field string="Documents" name="doc_count" widget="statinfo"/>
+            </button-->
+            <button string="Employee(s)" class="oe_stat_button" type="action" name="%(assigned_employees_action_window)d" icon="fa-tasks" attrs="{'invisible': [('is_default', '==', True)]}">
+            </button>
+
+          </div>
+          <div class="oe_title">
+            <h1>
+              <field name="name" placeholder="Calendar Name" required="1"/>
+            </h1>
+          </div>
+
+          <group>
+            <group>
+              <field name="sub_calendar" widget="radio"/>
+              <field name="is_default" readonly="1"/>
+              <field name="create_date" attrs="{'invisible': [('id', '==', False)]}"/>
+              
+            </group>
+            <group>
+              <field name="parent_id" attrs="{'invisible': [('sub_calendar', '==', 'no')], 'required': [('sub_calendar', '==', 'yes')]}"/>
+              <field name="start_time" attrs="{'invisible': [('sub_calendar', '==', 'no')], 'required': [('sub_calendar', '==', 'yes')]}"/>
+              <field name="end_time" attrs="{'invisible': [('sub_calendar', '==', 'no')], 'required': [('sub_calendar', '==', 'yes')]}"/>
+            </group>
+          </group>
+
+          <notebook>
+
+            <page name="description" string="Description">
+              <field name="description"/>
+            </page>
+
+            <page name="work" string="Work days">
+              <field name="time_ids" context="{'calendar_id':active_id}">
+                <tree editable="bottom" create="false" delete="false">
+                  <field name="day" readonly="1" force_save="1"/>
+                  <field name="work_Time" widget="float_time"/>
+                </tree>
+              </field>
+            </page>
+
+            <!--page name="employee" string="Employee" attrs="{'invisible': [('is_default', '==', True)]}">
+              <button name="action_add_employees" string="Add Employee(s)" class="oe_highlight" type="object" invisible="1"/>
+              <field name="assignee_ids" context="{'calendar_id':active_id}">
+                <tree editable="bottom">
+                  <field name="employee_id" required="1"/>
+                  <field name="start_time" required="1"/>
+                  <field name="end_time"/>
+                </tree>
+              </field>
+            </page-->
+
+          </notebook>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record model="ir.ui.view" id="multi_calendar_list">
+    <field name="name">multi_calendar list</field>
+    <field name="model">calendar.calendar</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="name"/>
+        <field name="sub_calendar"/>
+        <field name="parent_id"/>
+        <field name="is_default"/>
+        <button string="View calendar" name="action_view_calendar" type="object" icon="fa-search"/>
+      </tree>
+    </field>
+  </record>
+
+  <record model="ir.ui.view" id="multi_calendar_employee_form">
+    <field name="name">Assigne Employees</field>
+    <field name="model">calendar.assignee</field>
+    <field name="arch" type="xml">
+      <form>
+        <group>
+          <group>
+            <!--field name="employee_ids" required="1" widget="many2many_tags"/-->
+            <field name="employee_id" required="1"/>
+            <field name="start_time" required="1"/>
+            <field name="end_time"/>
+          </group>
+        </group>
+      </form>
+    </field>
+  </record>
+
+  <record model="ir.ui.view" id="multi_calendar_employee_list">
+    <field name="name">Assigned Employees</field>
+    <field name="model">calendar.assignee</field>
+    <field name="arch" type="xml">
+      <tree delete="true" js_class="calender_header" editable="top">
+        <header>
+          <button name="open_update_dates" type="object" string="Update Period"/>
+        </header>
+        <field name="employee_id" required="1"/>
+        <field name="start_time" required="1"/>
+        <field name="end_time"/>
+      </tree>
+    </field>
+  </record>
+
+  <record model="ir.actions.act_window" id="multi_calendar_action_window">
+    <field name="name">multi_calendar window</field>
+    <field name="res_model">calendar.calendar</field>
+    <field name="view_mode">tree,form</field>
+    <field name="search_view_id" ref="calendar_calendar_search"/>
+  </record>
+
+
+</odoo>

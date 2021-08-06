@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_calendar_calendar,calendar.calendar,model_calendar_calendar,,1,1,1,1
+access_calendar_time,calendar.time,model_calendar_time,,1,1,1,1
+access_calendar_assignee,calendar.assignee,model_calendar_assignee,,1,1,1,1
+access_calendar_assignee_employee_wizard,assigne.employees.wizard,model_assigne_employees_wizard,,1,1,1,1
+access_calendar_update_period_wizard,update.period.wizard,model_update_period_wizard,,1,1,1,1

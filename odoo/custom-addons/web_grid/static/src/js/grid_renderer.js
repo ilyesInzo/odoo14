@@ -162,13 +162,34 @@ odoo.define('web_grid.GridRenderer', function (require) {
             const grid_path = cell_path.slice(0, -3);
             const row_path = grid_path.concat(['rows'], cell_path.slice(-2, -1));
             const col_path = grid_path.concat(['cols'], cell_path.slice(-1));
+            doneCallback = doneCallback || function(){
+                var button = $('.grid_refresh')
+                if (button){
+                    button.trigger('click')
+                }
+            },
+            
             this.trigger('cell-edited', {
                 cell_path,
                 row_path,
                 col_path,
                 value,
-                doneCallback,
+                doneCallback 
             });
+            this.trigger('cell-edited-temporary', {
+                cell_path,
+                row_path,
+                col_path,
+                value
+            });
+
+            /*setTimeout(() => {
+                var button = $('.grid_refresh')
+                if (button){
+                    button.trigger('click')
+                }
+            },1000)*/
+
         }
         /**
          * @private

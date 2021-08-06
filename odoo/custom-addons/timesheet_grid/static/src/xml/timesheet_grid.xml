@@ -83,10 +83,10 @@
                 <t t-foreach="columns" t-as="column" t-key="column_index">
                     <th >
                         <t t-if="column.isOnCallDuty">
-                            <input class="o_grid_input" checked="column.is_current" type="checkbox" tabindex="1" t-att-value="column.date" t-on-click="_onGridCheckBoxClick"/>
+                            <input style="appearance: auto;height: 15px !important;" class="o_grid_input" checked="column.is_current" type="checkbox" tabindex="1" t-att-value="column.date" t-on-click="_onGridCheckBoxClick"/>
                         </t>
                         <t t-else="">
-                            <input class="o_grid_input" type="checkbox" tabindex="1" t-att-value="column.date" t-on-click="_onGridCheckBoxClick"/>
+                            <input style="appearance: auto;height: 15px !important;" class="o_grid_input" type="checkbox" tabindex="1" t-att-value="column.date" t-on-click="_onGridCheckBoxClick"/>
                         </t>
                     </th>
                 </t>

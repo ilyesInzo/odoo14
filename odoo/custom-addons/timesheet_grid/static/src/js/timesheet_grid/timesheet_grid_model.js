@@ -72,7 +72,7 @@ odoo.define('timesheet_grid.GridModel', function (require) {
                 throw new Error(_t("The sectioned grid view can't handle groups with different columns sets"));
             }*/
             results.forEach((group, groupIndex) => {
-                results[groupIndex].totals = this._computeTotals(group.grid);
+                results[groupIndex].totals = this._computeTotals(group.grid, group.rows);
                 group.rows.forEach((row, rowIndex) => {
                     const { id, label } = this._getRowInfo(row, true);
                     results[groupIndex].rows[rowIndex].id = id;
@@ -83,7 +83,7 @@ odoo.define('timesheet_grid.GridModel', function (require) {
             this._gridData = {
                 isGrouped: true,
                 data: results,
-                totals: this._computeTotals(_.flatten(_.pluck(results, 'grid'), true)),
+                totals: this._computeTotals(_.flatten(_.pluck(results, 'grid'), true), _.flatten(_.pluck(results, 'rows'), true)),
                 groupBy,
                 colField: this.colField,
                 cellField: this.cellField,

@@ -10,7 +10,7 @@ from pytz import utc
 from odoo import models, fields, api, _
 from odoo.addons.web_grid.models.models import END_OF, STEP_BY, START_OF
 from odoo.addons.resource.models.resource import make_aware
-from odoo.exceptions import UserError, AccessError
+from odoo.exceptions import UserError, AccessError, ValidationError
 from odoo.osv import expression
 
 
@@ -46,6 +46,13 @@ class AnalyticLine(models.Model):
     night_shift = fields.Boolean(string="Night Shift", default=False)
     call_on_duty = fields.Boolean(string="Call-on duty", default=False)
 
+
+    @api.constrains('unit_amount')
+    def _check_values(self):
+        if self.unit_amount == 0.0:
+            raise ValidationError(_('Time Spent should be > 0'))
+        if self.unit_amount > 1:
+            raise ValidationError(_('Time Spent should be <= 1 Day'))   
 
     def _compute_display_timer(self):
         other_employee_lines = self.filtered(lambda l: l.employee_id not in self.env.user.employee_ids)
@@ -241,7 +248,7 @@ class AnalyticLine(models.Model):
                 result.update(rows=rows, grid=grid)
             else:
                 result['rows'].extend(rows)
-                result['grid'].extend(grid)      
+                result['grid'].extend(grid)   
         return result
 
     def _grid_range_of(self, span, step, anchor, field):
@@ -342,8 +349,73 @@ class AnalyticLine(models.Model):
             })
         return notification 
 
+    def check_is_work_day(self,nightshift, date, employee_id):
+
+        if not nightshift and date.weekday() >= 5:
+           raise ValidationError(_("Work outside workday not possible"))
+        
+        query = """ SELECT id, request_date_from, request_date_to FROM {table} where employee_id = {employee_id} and state <> 'refuse' and state <> 'cancle' """.format(table='hr_leave', employee_id=employee_id)
+        self._cr.execute(query)
+        leaves = self._cr.fetchall()
+        for leave in leaves:
+            if date >= leave[1] and date <= leave[2]:
+               raise ValidationError(_('You have a leave at this date %(date)s',date=date))
+        
+    def check_day_limit_activity(self, vals_list):
+        encoding_uom = self.env.company.timesheet_encode_uom_id
+        if encoding_uom.name == 'Days':
+            for timeshit in vals_list:
+                if timeshit['unit_amount'] < 0:
+                    return False
+                
+                self.check_is_work_day(timeshit['night_shift'], datetime.strptime(timeshit['date'], '%Y-%m-%d').date(), timeshit['employee_id'])
+
+                if not timeshit['night_shift']:
+                    lines = self.env['account.analytic.line'].search([
+                ('employee_id', '=', timeshit['employee_id']),
+                ('date', '=', timeshit['date'])])
+                    res = 0
+                    for line in lines:
+                        if not line.night_shift:
+                            res = res +  line.unit_amount
+
+                    if (res + timeshit['unit_amount']) > 1:
+                        raise ValidationError(_("Daily overtime work."))
+                
+        return True
+
+    def check_day_limit_activity_edit(self, new_amount):
+        encoding_uom = self.env.company.timesheet_encode_uom_id
+        
+        if new_amount < 0:
+            return False
+
+        if encoding_uom.name == 'Days':
+            for current_line in self:
+
+                self.check_is_work_day(current_line.night_shift , current_line.date, current_line.employee_id.id)
+
+                if not current_line.night_shift:
+                    lines = self.env['account.analytic.line'].search([
+                ('employee_id', '=', current_line.employee_id.id),
+                ('date', '=', current_line.date),
+                ('id', '!=', current_line.id)])
+
+                    res = new_amount
+                    for line in lines:
+                        if not line.night_shift:
+                            res = res +  line.unit_amount
+                    if res > 1:
+                        raise ValidationError(_("Daily overtime work."))
+
+        return True
+
     @api.model_create_multi
     def create(self, vals_list):
+
+        res = self.check_day_limit_activity(vals_list)
+        if res is False:
+            return False
 
         analytic_lines = super(AnalyticLine, self).create(vals_list)
         for line in analytic_lines:
@@ -355,6 +427,11 @@ class AnalyticLine(models.Model):
         return analytic_lines
 
     def write(self, vals):
+
+        res = self.check_day_limit_activity_edit(vals.get('unit_amount', 0))
+        if res is False:
+            return False
+
         if not self.user_has_groups('hr_timesheet.group_hr_timesheet_approver'):
             if 'validated' in vals:
                 raise AccessError(_('Only a Timesheets Approver or Manager is allowed to validate a timesheet'))
@@ -809,7 +886,20 @@ class AnalyticLine(models.Model):
         }   
 
         analytic_lines = self.filtered_domain([('state', '=', 'draft')])
-        #print(analytic_lines)
+        values = dict()
+        
+        for line in analytic_lines:
+            if not line.night_shift:
+                sum = values.get(line.date, 0)
+                if sum:
+                    values.update({line.date:(line.unit_amount + sum)})
+                else:
+                    values.update({line.date:line.unit_amount})
+
+        for date in values:
+            if values.get(date) < 1 and values.get(date) > 0:
+                raise ValidationError(_("Timesheet daily work not completed."))
+
         if analytic_lines:
             analytic_lines.write({'state':'confirm'})
         else:
@@ -818,7 +908,7 @@ class AnalyticLine(models.Model):
                 'type':'warning' 
             })
             return notification
-
+        
     def action_cancel(self):
         self.write({'state': 'draft'})
 

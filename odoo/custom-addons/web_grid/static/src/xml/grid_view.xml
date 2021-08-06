@@ -121,7 +121,8 @@
                                     isTotal="true"/>
 
                                 <t t-if="column.isOnCallDuty">
-                                    <input class="o_grid_input"
+                                    <input style="appearance: auto;height: 15px !important;"
+                                    class="o_grid_input"
                                     checked="true"
                                     type="checkbox"
                                     tabindex="1" t-att-value="column.date"
@@ -129,7 +130,8 @@
                                     />
                                 </t>
                                 <t t-else="">
-                                    <input class="o_grid_input"
+                                    <input style="appearance: auto;height: 15px !important;"
+                                    class="o_grid_input"
                                     type="checkbox"
                                     tabindex="1" t-att-value="column.date"
                                     disabled="true"/>
@@ -266,6 +268,7 @@
             </div>
         </t>
         <t t-else="">
+        <!--  and !cell.is_unavailable -->
             <t t-if="state.editMode and state.currentPath===cellPath">
                 <input class="o_grid_input"
                     t-ref="currentInput"
@@ -369,6 +372,12 @@
                     <t t-esc="btn.string"/>
                 </button>
             </div>
+
+            <button class="grid_refresh  o_grid_button_change_range btn btn-primary d-none"
+                    type="button">
+                <span class="fa fa-refresh" role="img" aria-label="Refresh" title="Refresh"/>
+            </button>
+
             <button class="grid_arrow_previous  o_grid_button_change_range btn btn-primary d-none"
                     type="button">
                 <span class="fa fa-arrow-left" role="img" aria-label="Previous" title="Previous"/>

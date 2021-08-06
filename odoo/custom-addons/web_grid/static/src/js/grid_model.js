@@ -33,9 +33,9 @@ const GridModel = AbstractModel.extend({
      */
     computeAllTotals: function (state) {
         state.data.forEach((group, groupIndex) => {
-            state.data[groupIndex].totals = this._computeTotals(group.grid);
+            state.data[groupIndex].totals = this._computeTotals(group.grid, group.rows);
         });
-        state.totals = this._computeTotals(_.flatten(_.pluck(state.data, 'grid'), true));
+        state.totals = this._computeTotals(_.flatten(_.pluck(state.data, 'grid'), true), _.flatten(_.pluck(state.data, 'rows'), true));
         return state;
     },
     /**
@@ -217,7 +217,7 @@ const GridModel = AbstractModel.extend({
      * @param {Object[]} grid
      * @returns {{super: number, rows: {}, columns: {}}}
      */
-    _computeTotals: function (grid) {
+    _computeTotals: function (grid, rows = []) {
         const totals = {
             super: 0,
             rows: {},
@@ -225,11 +225,14 @@ const GridModel = AbstractModel.extend({
         };
         for (let i = 0; i < grid.length; i++) {
             const row = grid[i];
+            const is_nightshift = rows[i].values.night_shift
             for (let j = 0; j < row.length; j++) {
+                if (!is_nightshift){
                 const cell = row[j];
                 totals.super += cell.value;
                 totals.rows[i] = (totals.rows[i] || 0) + cell.value;
                 totals.columns[j] = (totals.columns[j] || 0) + cell.value;
+                }
             }
         }
         return totals;
@@ -329,7 +332,7 @@ const GridModel = AbstractModel.extend({
             throw new Error(_t("The sectioned grid view can't handle groups with different columns sets"));
         }
         results.forEach((group, groupIndex) => {
-            results[groupIndex].totals = this._computeTotals(group.grid);
+            results[groupIndex].totals = this._computeTotals(group.grid,group.rows);
             group.rows.forEach((row, rowIndex) => {
                 const { id, label } = this._getRowInfo(row, true);
                 results[groupIndex].rows[rowIndex].id = id;
@@ -340,7 +343,7 @@ const GridModel = AbstractModel.extend({
         this._gridData = {
             isGrouped: true,
             data: results,
-            totals: this._computeTotals(_.flatten(_.pluck(results, 'grid'), true)),
+            totals: this._computeTotals(_.flatten(_.pluck(results, 'grid'), true), _.flatten(_.pluck(results, 'rows'), true)),
             groupBy,
             colField: this.colField,
             cellField: this.cellField,
@@ -407,7 +410,7 @@ const GridModel = AbstractModel.extend({
         this._gridData = {
             isGrouped: false,
             data: [result],
-            totals: this._computeTotals(result.grid),
+            totals: this._computeTotals(result.grid,result.rows),
             groupBy,
             colField: this.colField,
             cellField: this.cellField,

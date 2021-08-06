@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="assigne_employees_wizard_form" model="ir.ui.view">
+            <field name="name">assigne.employees.wizard form</field>
+            <field name="model">assigne.employees.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Assign Employees">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="employee_ids" required="1" widget="many2many_tags"/>
+                                <field name="start_time" required="1"/>
+                                <field name="end_time"/>
+                                <field name="calendar_id" invisible="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button name="action_assigne_employees" type="object" string="Assigne" class="btn-primary" /> <!-- context="{'search_default_calendar_id': calendar_id} -->
+                        <button name="cancel" special="cancel" type="object" string="Cancel" class="btn-secondary"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

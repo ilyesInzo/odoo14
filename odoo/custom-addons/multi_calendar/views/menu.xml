@@ -1,0 +1,10 @@
+    <odoo>
+    
+    <menuitem name="Calendars" id="multi_calendar_menu_1" parent="calendar.mail_menu_calendar" action="multi_calendar_action_window"/>
+    
+    <record id="calendar.action_calendar_event" model="ir.actions.act_window">
+        <field name="domain">[('calendar_id.is_default','=','True')]</field>
+    </record>
+
+    </odoo>
+    

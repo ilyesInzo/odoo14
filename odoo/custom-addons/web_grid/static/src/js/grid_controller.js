@@ -58,6 +58,7 @@ var GridController = AbstractController.extend({
         this.$buttons.on('click', '.grid_arrow_next', this._onPaginationChange.bind(this, 'next'));
         this.$buttons.on('click', '.grid_arrow_range', this._onRangeChange.bind(this));
         this.$buttons.on('click', '.grid_arrow_button', this._onButtonClicked.bind(this));
+        this.$buttons.on('click', '.grid_refresh', this._onRefresh.bind(this));
         this.updateButtons();
         if ($node) {
             this.$buttons.appendTo($node);
@@ -303,6 +304,11 @@ var GridController = AbstractController.extend({
         this.currentRange = $target.attr('data-name');
         this.update({range: this.currentRange});
     },
+    _onRefresh: function (dir) {
+        var state = this.model.get();
+        this.update({refresh: true});
+    },
+
 });
 
 return GridController;
